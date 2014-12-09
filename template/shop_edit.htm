@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="gb2312">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>修改店铺-吉康</title>
+    <link rel="stylesheet" href="css/shop.css"/>
+	<script  src="js/ajax_pic.js"></script>
+	<script charset="utf-8" src="../admin/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="../admin/kindeditor/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="../admin/kindeditor/plugins/code/prettify.js"></script>
+	<script>
+		KindEditor.ready(function(K) {
+			var editor1 = K.create('textarea[name="describe"]', {
+			items:[],
+			filterMode: true,
+				cssPath : '../admin/kindeditor/plugins/code/prettify.css',
+				uploadJson : '../admin/kindeditor/upload_json.php',
+				fileManagerJson : '../admin/kindeditor/file_manager_json.php',
+				allowFileManager : true,
+				
+				afterCreate : function() {
+					var self = this;
+					K.ctrl(document, 13, function() {
+						self.sync();
+						K('form[name=example]')[0].submit();
+					});
+					K.ctrl(self.edit.doc, 13, function() {
+						self.sync();
+						K('form[name=example]')[0].submit();
+					});
+				}
+			});
+			prettyPrint();
+		});
+	</script>
+	<script type="text/javascript">
+	function checkdata(){
+	var shop_name=document.getElementById('shop_name').value;
+	var mobilephone=document.getElementById('mobilephone').value;
+	var Business_Hours=document.getElementById('Business_Hours').value;
+	var address=document.getElementById('address').value;
+	var areaid=document.getElementById('areaid').value;
+	var big_type_id=document.getElementById('big_type_id').value;
+	var small_type_id=document.getElementById('small_type_id').value;
+	var describe=document.getElementById('describe').value;
+	var zoneid=document.getElementById('zoneid').value;
+	var emp = /^\s*$/;
+	if(emp.test(shop_name)){
+	alert("亲，请填写店铺名称！");
+	return false;
+	}else if(emp.test(mobilephone)){
+	alert("亲，请填写电话！");
+	return false;
+	}else if(emp.test(Business_Hours)){
+	alert("亲，请填写营业时间！");
+	return false;
+	}else if(emp.test(address)){
+	alert("亲，请填写店铺地址！");
+	return false;
+	}else if(emp.test(areaid)||areaid==0){
+	alert("亲，请选择区域！");
+	return false;
+	}else if(emp.test(zoneid)||zoneid==0){
+	alert("亲，请选择商圈！");
+	return false;
+	
+	}else if(emp.test(big_type_id)||big_type_id==0){
+	alert("亲，请选择大分类！");
+	return false;
+	}else if(emp.test(small_type_id)||small_type_id==0){
+	alert("亲，请选择小分类！");
+	return false;
+	}else if(emp.test(describe)){
+	alert("亲，请填写店铺介绍！");
+	return false;
+	}else{
+	return true;
+	}
+	
+	}
+	</script>
+	
+</head>
+<body>
+<div class="app-view">
+    <div class="app-page">
+        <header class="app-head">
+            <div class="inner">
+                <a class="link app-back" href="javascript:history.back();">
+                    <i class="icon-back"></i>
+                </a>
+				<p style=" float:right;"><a href="../business/?type=quit" class=""><input type="button" value="退出" name="" style="color:#666; width:60px; height:28px;"/></a></p>
+                <h1 class="title sliding">创建店铺</h1>
+            </div>
+        </header>
+        <section class="app-wrap">
+            <div class="inner">
+			
+                <form class="m-form" enctype="multipart/form-data" id="fr1" name="fr1" onSubmit="return checkdata();" action="index.php?type=shop_edit_post" method="post">
+                    <div class="row">
+                        <span class="tag">店铺名称：</span>
+                        <input type="text" id="shop_name" name="shop_name" value="<?php echo $list_shop[shop_name];?>"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">商家电话：</span>
+                        <input type="text" id="mobilephone" name="mobilephone" value="<?php echo $list_shop[mobilephone];?>"/>
+                    </div>
+					<div class="row">
+                        <span class="tag">图片：</span>
+
+                        <div class="file">
+                            点击上传
+                           <input name="uploadinput[]" id="tu1" onpropertychange="if(event.propertyName=='value') preview1.src=tu1.value.replace(/\\/g,'/')" type="file" />
+                        </div><img src="../upload/shop/thumb_<?php echo $list_shop[shop_pic];?>" onError="this.src='../upload/shop/thumbs_<?php echo $list_shop[shop_pic];?>'" alt="暂无图片" width="140px" height="60px;"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">营业时间：</span>
+                        <input type="text" id="Business_Hours" name="Business_Hours" value="<?php echo $list_shop[Business_Hours];?>"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">店铺地址：</span>
+                        <input type="text" id="address" name="address" value="<?php echo $list_shop[address];?>"/>
+                    </div>
+					<div class="row">
+                        <span class="tag">选择区域：</span>
+                        <select name="areaid" id="areaid" onChange="getCourses(this.value)"><option value="0">选择区域</option>
+<?php
+   foreach($qylist as $val){
+  if($val[id]==$list_shop[areaid]){
+  echo '<option value="'.$val[id].'" selected="\selected"\>'.$val[area].'</option>';
+  }else{
+  echo '<option value="'.$val[id].'">'.$val[area].'</option>';
+  }
+		
+		
+   }
+   ?></select><select name="zoneid" id="zoneid"><option value="0">选择商圈</option><?php
+   foreach($znlist as $val){
+   if($val[id]==$list_shop[zoneid]){
+  echo '<option value="'.$val[id].'" selected="\selected"\>'.$val[zones].'</option>';
+  }else{
+ echo '<option value="'.$val[id].'">'.$val[zones].'</option>';
+  }
+		
+		
+   }
+	
+?></select>
+                    </div>
+					<div class="row">
+                        <span class="tag">选择分类：</span>
+                       <select name="big_type_id" id="big_type_id" onChange="getCourse(this.value)"><option value="0">选择大分类</option><?php
+   foreach($btlist as $val){
+    if($val[id]==$list_shop[big_type_id]){
+  echo '<option value="'.$val[id].'" selected="\selected"\>'.$val[type_name].'</option>';
+  }else{
+echo '<option value="'.$val[id].'">'.$val[type_name].'</option>';
+  }
+		
+		
+   }
+	
+?></select><select name="small_type_id" id="small_type_id"><option value="0">选择小分类</option><?php
+   foreach($stlist as $val){
+    if($val[id]==$list_shop[small_type_id]){
+  echo '<option value="'.$val[id].'" selected="\selected"\>'.$val[small_type_name].'</option>';
+  }else{
+echo '<option value="'.$val[id].'">'.$val[small_type_name].'</option>';
+  }
+		
+		
+   }
+	
+?></select>
+                    </div>
+                    <div class="row">
+                        <span class="tag">店铺介绍：</span>
+                        <textarea name="describe" id="describe"><?php echo $list_shop[describe];?></textarea>
+                    </div>	
+					<input type="hidden" name="picurl" id="picurl" value="<?php echo $list_shop[shop_pic];?>"/>
+                    <input class="submit" name="sub1" id="sub1" type="submit" value="提交">
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+<script src="js/zepto.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ajax.js"></script>
+</html>

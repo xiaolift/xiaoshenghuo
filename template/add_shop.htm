@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="gb2312">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>添加店铺-吉康</title>
+    <link rel="stylesheet" href="css/shop.css"/>
+	<script  src="js/ajax_pic.js"></script>
+	<script type="text/javascript">
+	function checkdata(){
+	var shop_name=document.getElementById('shop_name').value;
+	var mobilephone=document.getElementById('mobilephone').value;
+	var Business_Hours=document.getElementById('Business_Hours').value;
+	var address=document.getElementById('address').value;
+	var areaid=document.getElementById('areaid').value;
+	var big_type_id=document.getElementById('big_type_id').value;
+	var small_type_id=document.getElementById('small_type_id').value;
+	var describe=document.getElementById('describe').value;
+	var zoneid=document.getElementById('zoneid').value;
+	var emp = /^\s*$/;
+	if(emp.test(shop_name)){
+	alert("亲，请填写店铺名称！");
+	return false;
+	}else if(emp.test(mobilephone)){
+	alert("亲，请填写电话！");
+	return false;
+	}else if(emp.test(Business_Hours)){
+	alert("亲，请填写营业时间！");
+	return false;
+	}else if(emp.test(address)){
+	alert("亲，请填写店铺地址！");
+	return false;
+	}else if(emp.test(areaid)||areaid==0){
+	alert("亲，请选择区域！");
+	return false;
+	}else if(emp.test(zoneid)||zoneid==0){
+	alert("亲，请选择商圈！");
+	return false;
+	
+	}else if(emp.test(big_type_id)||big_type_id==0){
+	alert("亲，请选择大分类！");
+	return false;
+	}else if(emp.test(small_type_id)||small_type_id==0){
+	alert("亲，请选择小分类！");
+	return false;
+	}else if(emp.test(describe)){
+	alert("亲，请填写店铺介绍！");
+	return false;
+	}else{
+	return true;
+	}
+	
+	}
+	</script>
+</head>
+<body>
+<div class="app-view">
+    <div class="app-page">
+        <header class="app-head">
+            <div class="inner">
+                <a class="link app-back" href="javascript:history.back();">
+                    <i class="icon-back"></i>
+                </a>
+				<p style=" float:right;"><a href="../business/?type=quit" class=""><input type="button" value="退出" name="" style="color:#666; width:60px; height:28px;"/></a></p>
+                <h1 class="title sliding">创建店铺</h1>
+            </div>
+        </header>
+        <section class="app-wrap">
+            <div class="inner">
+			<div class="row" style="position:relative;min-height: 34px;margin-bottom: 6px;padding-left: 80px; margin-top:15px;">
+                        <span class="tag" style="position: absolute;left: 0;top: 0;display:block;width: 80px;padding-right:10px;text-align: right;line-height: 34px; text-indent:2px;">店铺图片:</span>
+                        <div class="file" style="display: block;width: 100px;height: 34px;text-align: center;line-height: 34px;color: #fff;background-color: #f96a41;border: 0 none; -webkit-border-radius: 5px;border-radius: 5px;" >
+                           <span id="sltpic">选择图片</span>
+						   <form action="up_shop_pic.php" method="post" enctype="multipart/form-data" target="upframe" onSubmit="uploadimg(this); return false;">
+                           <input name="uploadinput[]" id="tu1" onpropertychange="if(event.propertyName=='value') preview1.src=tu1.value.replace(/\\/g,'/')" type="file"  style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;opacity: 0;" />
+                        </div><input type="submit" name="sub2" id="sub2" value="上传图片" style="position: absolute;left: 200px;top: -1px;display: block;width: 100px;height: 34px;text-align: center;line-height: 34px;color: #fff;background-color: #f96a41;border: 0 none; -webkit-border-radius: 5px;border-radius: 5px;"/></form><span id="showpic"></span>
+                    </div> <iframe id="upframe" name="upframe" src="up_shop_pic.php" style="display:none;">
+   </iframe>
+   <div class="msg" style="margin-top:0; margin-bottom:0; margin-left:90px; color:red;">
+                        请选择您的店铺照片，如：门头照
+                    </div>
+                <form class="m-form" id="fr1" name="fr1" onSubmit="return checkdata();" action="index.php?type=shop_add_post" method="post">
+                    <div class="row">
+                        <span class="tag">店铺名称：</span>
+                        <input type="text" id="shop_name" name="shop_name"/>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
+                        请填写您的店铺名称，如：肯德基
+                    </div>
+                    <div class="row">
+                        <span class="tag">商家电话：</span>
+                        <input type="text" id="mobilephone" name="mobilephone"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">营业时间：</span>
+                        <input type="text" id="Business_Hours" name="Business_Hours"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">店铺地址：</span>
+                        <input type="text" id="address" name="address"/>
+                    </div>
+					<div class="row">
+                        <span class="tag">选择区域：</span>
+                        <select name="areaid" id="areaid" onChange="getCourses(this.value)"><option value="0">选择区域</option>
+<?php
+   foreach($qylist as $val){
+   
+		echo '<option value="'.$val[id].'">'.$val[area].'</option>';
+		
+   }
+   ?></select><select name="zoneid" id="zoneid"><option value="0">选择商圈</option></select>
+                    </div>
+					<div class="row">
+                        <span class="tag">选择分类：</span>
+                       <select name="big_type_id" id="big_type_id" onChange="getCourse(this.value)"><option value="0">选择大分类</option><?php
+   foreach($btlist as $val){
+   
+		echo '<option value="'.$val[id].'">'.$val[type_name].'</option>';
+		
+   }
+	
+?></select><select name="small_type_id" id="small_type_id"><option value="0">选择小分类</option></select>
+                    </div>
+                    <div class="row">
+                        <span class="tag">店铺介绍：</span>
+                        <textarea name="describe" id="describe"></textarea>
+                    </div>
+					<input type="hidden" name="picurl" id="picurl"/>
+                    <input class="submit" name="sub1" id="sub1" type="submit" value="提交">
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+<script src="js/zepto.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ajax.js"></script>
+</html>

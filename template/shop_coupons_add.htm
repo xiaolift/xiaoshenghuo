@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="gb2312">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>添加优惠券-吉康</title>
+    <link rel="stylesheet" href="css/shop.css"/>
+    <link rel="stylesheet" href="css/spinningwheel.css"/>
+	<script  src="js/ajax_pic.js"></script>
+	<script type="text/javascript">
+	function checkdata(){
+	var name=document.getElementById('name').value;
+	var oldPrice=document.getElementById('oldPrice').value;
+	var nowPrice=document.getElementById('nowPrice').value;
+	var sum=document.getElementById('sum').value;
+	var Receive_max=document.getElementById('Receive_max').value;
+	var endTime=document.getElementById('endTime').value;
+	var start_time=document.getElementById('start_time').value;
+	//var tu1=document.getElementById('picurl').value;
+	var describe=document.getElementById('describe').value;
+	var use_help=document.getElementById('use_help').value;
+	var emp = /^\s*$/;
+	//alert(tu1);
+	if(emp.test(name)){
+	alert("亲，请填写优惠券名称！");
+	return false;
+	}else if(emp.test(oldPrice)){
+	alert("亲，请填写原价！");
+	return false;
+	}else if(emp.test(nowPrice)){
+	alert("亲，请填写优惠价！");
+	return false;
+	}else if(!emp.test(sum)&&isNaN(sum)){
+	alert("亲，请填写有效的阿拉伯数字！不填为无限量！");
+	return false;
+	}else if(isNaN(Receive_max)||Receive_max<1){
+	alert("亲，限量请填写有效的阿拉伯数字！");
+	return false;
+	}else if(emp.test(start_time)){
+	alert("亲，请选择开始时间！");
+	return false;
+	}else if(emp.test(endTime)){
+	alert("亲，请选择结束时间！");
+	return false;
+	}else if(emp.test(describe)){
+	alert("亲，请填写优惠详情！");
+	return false;
+	}else if(emp.test(use_help)){
+	alert("亲，请填写使用说明！");
+	return false;
+	}else{
+	return true;
+	}
+	}
+	</script>
+	
+	<script language="javascript">
+	function addpic(){
+	var tu1= document.getElementById('tu1').value;
+	getCourse_pic(tu1);
+	}
+	</script>
+</head>
+<body>
+<div class="app-view">
+    <div class="app-page">
+        <header class="app-head">
+            <div class="inner">
+                <a class="link app-back" href="javascript:history.back();">
+                    <i class="icon-back"></i>
+                </a>
+<p style=" float:right;"><a href="../business/?type=quit" class=""><input type="button" value="退出" name="" style="color:#666; width:60px; height:28px;"/></a></p>
+                <h1 class="title sliding">添加优惠券</h1>
+            </div>
+        </header>
+        <section class="app-wrap">
+            <div class="inner">
+			<div class="row" style="position:relative;min-height: 34px;margin-bottom: 6px;padding-left: 80px; margin-top:15px;">
+                        <span class="tag" style="position: absolute;left: 0;top: 0;display:block;width: 80px;padding-right:10px;text-align: right;line-height: 34px; text-indent:2px;">商品图片:</span>
+                        <div class="file" style="display: block;width: 100px;height: 34px;text-align: center;line-height: 34px;color: #fff;background-color: #f96a41;border: 0 none; -webkit-border-radius: 5px;border-radius: 5px;" >
+                           <span id="sltpic">选择图片</span>
+						   <form action="uppic.php" method="post" enctype="multipart/form-data" target="upframe" onSubmit="uploadimg(this); return false;">
+                           <input name="uploadinput[]" id="tu1" onpropertychange="if(event.propertyName=='value') preview1.src=tu1.value.replace(/\\/g,'/')" type="file"  style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;opacity: 0;" />
+                        </div><input type="submit" name="sub2" id="sub2" value="上传图片" style="position: absolute;left: 200px;top: -1px;display: block;width: 100px;height: 34px;text-align: center;line-height: 34px;color: #fff;background-color: #f96a41;border: 0 none; -webkit-border-radius: 5px;border-radius: 5px;"/></form><span id="showpic"></span>
+                    </div> <iframe id="upframe" name="upframe" src="uppic.php" style="display:none;">
+   </iframe>
+                <form class="m-form" onSubmit="return checkdata();" id="fr1" name="fr1" action="index.php?type=shop_coupons_add_post" method="post">
+                    <div class="row">
+                        <span class="tag">优惠名称：</span>
+                        <input type="text" id="name" name="name"/>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
+                        请填写您的商品或服务名称
+                    </div>
+                    <div class="row">
+                        <span class="tag">原价：</span>
+                        <input type="text" id="oldPrice" name="oldPrice"/>
+                    </div>
+                    <div class="row">
+                        <span class="tag">优惠价：</span>
+                        <input type="text" id="nowPrice" name="nowPrice"/>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
+                        顾客领取优惠券后，到店所享受的实际价格
+                    </div>
+                    <div class="row">
+                        <span class="tag">数量：</span>
+                        <input type="text" id="sum" name="sum"/>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px;">
+                        提示：不填写则为不限量
+                    </div>
+					<div class="row">
+                        <span class="tag">限量：</span>
+                        <input type="text" id="Receive_max" name="Receive_max" value="1"/>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px;">
+                        提示：限制用户每次领取的数量
+                    </div>
+					<div class="row">
+                        <span class="tag">开始时间：</span>
+                        <div class="time1" id="js_times" style=" border:1px solid #e1e1e1; border-radius: 5px;">
+                            <div class="text"></div>
+                            <input type="text" style="border:0;" readonly="true" id="start_time" name="start_time"/>
+                        </div>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
+                        优惠券开始使用的时间
+                    </div>
+                    <div class="row">
+                        <span class="tag">结束时间：</span>
+                        <div class="time1" id="js_time" style=" border:1px solid #e1e1e1; border-radius: 5px;">
+                            <div class="text"></div>
+                            <input type="text" style="border:0;" readonly="true" id="endTime" name="endTime"/>
+                        </div>
+                    </div>
+					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
+                        优惠券使用的截止时间
+                    </div>
+                    <div class="row">
+                        <span class="tag">优惠详情：</span>
+                        <textarea id="describe" name="describe"></textarea>
+                    </div>
+                    <div class="row">
+                        <span class="tag">使用说明：</span>
+                        <textarea id="use_help" name="use_help" ></textarea>
+                    </div>
+					<input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>" />
+					<input type="hidden" name="picurl" id="picurl"/>
+                    <input class="submit" type="submit" value="提交" >
+                    <div class="msg">
+                        提示：资料提交后需要审核，如需快速审核，请电话联系我们：400-000-9682
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+<script  src="js/zepto.min.js"></script>
+<script  src="js/app.js"></script>
+<script  src="js/spinningwheel-min.js"></script>
+<script>
+    $(function () {
+        var ifShow = false;
+        var $box = $("#js_time");
+        var $time = $box.find('input');
+        var $text = $box.find('.text');
+        $box.on('click', function () {
+            if (ifShow) {
+                return;
+            }
+            ifShow = true;
+            var now = new Date();
+            var days = {};
+            var years = {};
+            var months = { 1: '1月', 2: '2月', 3: '3月', 4: '4月', 5: '5月', 6: '6月', 7: '7月', 8: '8月', 9: '9月', 10: '10月', 11: '11月', 12: '12月' };
+            var hours = {};
+            var minute = {}
+
+            for (var i = 0; i < 24; i++) {
+            }
+
+            for (var i = 0; i < 60; i++) {
+                minute[i.length == 1 ? '0' + i : i] = i.length == 1 ? '0' + i : i;
+                if (i < 24) {
+                    hours[i] = i;
+                }
+                if (i < 31) {
+                    days[i + 1] = i + 1;
+                }
+            }
+
+
+            for (i = now.getFullYear(); i < now.getFullYear() + 20; i++) {
+                years[i] = i;
+            }
+
+            SpinningWheel.addSlot(years, 'right', now.getFullYear());
+            SpinningWheel.addSlot(months, 'right', now.getMonth() + 1);
+            SpinningWheel.addSlot(days, 'right', now.getDate());
+            SpinningWheel.addSlot(hours, 'right', now.getHours());
+            SpinningWheel.addSlot(minute, 'right', now.getMinutes());
+
+            SpinningWheel.setCancelAction(function () {
+                ifShow = false;
+            });
+            SpinningWheel.setDoneAction(function () {
+                var results = SpinningWheel.getSelectedValues();
+                var times = results.keys.toString().split(',');
+                $text.html();
+                $time.val(times[0] + '-' + times[1] + "-" + times[2] + ' ' + times[3] + ':' + times[4]);
+                ifShow = false;
+            });
+
+            SpinningWheel.open();
+        });
+    })
+</script>
+<script>
+    $(function () {
+        var ifShow = false;
+        var $box = $("#js_times");
+        var $time = $box.find('input');
+        var $text = $box.find('.text');
+        $box.on('click', function () {
+            if (ifShow) {
+                return;
+            }
+            ifShow = true;
+            var now = new Date();
+            var days = {};
+            var years = {};
+            var months = { 1: '1月', 2: '2月', 3: '3月', 4: '4月', 5: '5月', 6: '6月', 7: '7月', 8: '8月', 9: '9月', 10: '10月', 11: '11月', 12: '12月' };
+            var hours = {};
+            var minute = {}
+
+            for (var i = 0; i < 24; i++) {
+            }
+
+            for (var i = 0; i < 60; i++) {
+                minute[i.length == 1 ? '0' + i : i] = i.length == 1 ? '0' + i : i;
+                if (i < 24) {
+                    hours[i] = i;
+                }
+                if (i < 31) {
+                    days[i + 1] = i + 1;
+                }
+            }
+
+
+            for (i = now.getFullYear(); i < now.getFullYear() + 20; i++) {
+                years[i] = i;
+            }
+
+            SpinningWheel.addSlot(years, 'right', now.getFullYear());
+            SpinningWheel.addSlot(months, 'right', now.getMonth() + 1);
+            SpinningWheel.addSlot(days, 'right', now.getDate());
+            SpinningWheel.addSlot(hours, 'right', now.getHours());
+            SpinningWheel.addSlot(minute, 'right', now.getMinutes());
+
+            SpinningWheel.setCancelAction(function () {
+                ifShow = false;
+            });
+            SpinningWheel.setDoneAction(function () {
+                var results = SpinningWheel.getSelectedValues();
+                var times = results.keys.toString().split(',');
+                $text.html();
+                $time.val(times[0] + '-' + times[1] + "-" + times[2] + ' ' + times[3] + ':' + times[4]);
+                ifShow = false;
+            });
+
+            SpinningWheel.open();
+        });
+    })
+</script>
+</html>

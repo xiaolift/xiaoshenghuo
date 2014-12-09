@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="gb2312">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>优惠券列表-吉康</title>
+    <link rel="stylesheet" href="css/shop.css"/>
+</head>
+<body>
+<div class="app-view">
+    <div class="app-page">
+        <header class="app-head">
+            <div class="inner">
+				 <a class="link app-back" href="javascript:history.back();">
+                    <i class="icon-back"></i>
+                </a>
+<p style=" float:right;"><a href="../business/?type=quit" class=""><input type="button" value="退出" name="" style="color:#666; width:60px; height:28px;"/></a></p>
+                <h1 class="title sliding">优惠券列表</h1>
+            </div>
+        </header>
+        <footer class="app-foot app-foot-button">
+            <div class="inner">
+                <a class="button" href="index.php?type=coupons_add&shop_id=<?php echo $fid;?>">添加优惠券</a>
+            </div>
+        </footer>
+        <section class="app-wrap" id="js_wrap">
+            <div class="inner">
+                <div class="m-list s-pdt">
+                    <nav id="js_fix" class="nav">
+                        <a class="z-sel" href="#"><span>优惠券</span></a>
+                        <a href="index.php?type=shop_activities_admin&shop_id=<?php echo $fid;?>"><span>活动</span></a>
+                        <a href="index.php?type=shop_users_admin&shop_id=<?php echo $fid;?>"><span>会员</span></a>
+                    </nav>
+                    <ul class="coupons">
+					<?php if($stlist){ foreach($stlist as $rs){?>
+                        <li>
+                            <a class="f-cb" href="index.php?type=coupons_edit&fid=<?php echo $rs[id];?>">
+                                <img src="../upload/coupons/<?php echo  'thumb_'.$rs[pic];?>" onError="this.src='../upload/coupons/<?php echo  'thumbs_'.$rs[pic];?>'" class="pic">
+
+                                <div class="box">
+                                    <div class="content">
+                                        <div class="name f-toe"><?php echo $rs[name];?></div>
+                                        <p>
+                                            <?php echo $rs[sum];?> <span class="right"><span><?php echo $rs[Receive_num];?></span>人领取/<?php echo $rs[use_num];?>人使用</span>
+                                        </p>
+                                        <p class="money">
+                                            <span><?php echo $rs[nowPrice];?></span>元<i><?php echo $rs[oldPrice];?>元</i>
+                                            <b class="state right z-no"><?php echo $rs[check];?></b>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li><?php }}else{echo "暂无优惠券……";} ?>
+                 
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+<script src="js/zepto.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+    $(function () {
+        var $fix = $("#js_fix");
+        var $box = $("#js_wrap");
+        $(document).on('touchstart', function () {
+            $fix.css('top', 0);
+        }).on('touchend', function () {
+            $fix.css('top', $box.scrollTop());
+        });
+    });
+</script>
+</html>
